@@ -15,18 +15,21 @@ fragen = [
     "13. Ihr entscheidet euch einen gemeinsamen Film zu schauen. Welches Genre nimmst du?\n",
     "14. Du machst Essen für euch beide. Was hättest du am liebsten?\n",
 ]
-antworten = []
-print("Neuen Kandidat hinzufügen:")
-print("Welche Antworten hat der Kandidat gegeben:\n")
-for i in range(14):
-    antworten.append(input(fragen[i]))
-    print("")
-name = input("Name: ")
 stufe = input("Stufe: ")
-interessiertAnM = input("Interessiert an Jungs (\"Ja\" wenn interessiert, auch wenn d angekreuzt wurde) ")
-interessiertAnW = input("Interessiert an Mädchen (\"Ja\" wenn interessiert, auch wenn d angekreuzt wurde) ")
-geschlecht = input("Eigenes Geschlecht (M oder W): ")
+abbruch = False
+while not abbruch:
+    antworten = []
+    print("Neuen Kandidat hinzufügen:")
+    print("Welche Antworten hat der Kandidat gegeben:\n")
+    for i in range(14):
+        antworten.append(input(fragen[i]))
+        print("")
+    name = input("Name: ")
+    interessiertAnM = input("Interessiert an Jungs (\"Ja\" wenn interessiert, auch wenn d angekreuzt wurde) ")
+    interessiertAnW = input("Interessiert an Mädchen (\"Ja\" wenn interessiert, auch wenn d angekreuzt wurde) ")
+    geschlecht = input("Eigenes Geschlecht (M oder W): ")
 
-f = open("./Stufen/" + stufe + ".txt", "a+")
-f.write(name + ";" + geschlecht + ";" + interessiertAnM + ";" + interessiertAnW + ";" + str(antworten) + "\n")
-f.close()
+    f = open("./Stufen/" + stufe + ".txt", "a+")
+    f.write(name + ";" + geschlecht + ";" + interessiertAnM + ";" + interessiertAnW + ";" + str(antworten) + "\n")
+    f.close()
+    abbruch = bool(input("Abbruch"))
