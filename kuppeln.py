@@ -1,8 +1,8 @@
 import ast
-klasse = input("Klasse (in Großbuchstaben, z.B. \"9A\"): ")
-anzahlDerMatches = 3
+stufe = input("Stufe: ")
 
-f = open("./Stufen/" + klasse + ".txt", "r")
+f = open("./Stufen/" + stufe + ".txt", "r")
+out = open("./Output/" + stufe + ".txt", "w")
 lines = f.readlines()
 for i in lines:
     name = i.split(";")[0]
@@ -20,7 +20,9 @@ for i in lines:
             eigeneAnworten = ast.literal_eval(neuersplit[4])
             break
     # Nach möglichen Treffern suchen
-    scores = []
+    jungsScores = []
+    maedchenScores = []
+    gemischtScores = []
     for i in lines:
         neuersplit = i.split(";")
         score = 0
@@ -29,26 +31,29 @@ for i in lines:
             for i in range(14):
                 if antworten[i] == eigeneAnworten[i]:
                     score += 1
-        
-        # Steh ich auf das Geschlecht der Person?
-        # Wenn ja dann soll das stark gewichtet werden
-        if (stehtAufJungs and (neuersplit[1] == "M")) or (stehtAufMaedchen and (neuersplit[1] == "W")):
-            score *= 10
 
-        # Steht die Person auf das Geschlecht von mir?
-        # Wenn ja dann soll das stark gewichtet werden
-        if (eigenesGeschlechtIstJunge and (neuersplit[2] == "Ja")) or (not eigenesGeschlechtIstJunge) and (split[3] == "Ja"):
-            score *= 10
-        
-        # Begründung für die starken Gewichte:
-        # Ich will ja nicht mit meinem besten Freund gematched werden, nur
-        # weil der die gleichen Antworten gegeben hat wie ich.
+        if (neuersplit[1] == "M"):
+            jungsScores.append((neuersplit[0], score))
+        else:
+            maedchenScores.append((neuersplit[0], score))
+        gemischtScores.append((neuersplit[0], score))
 
-        scores.append((neuersplit[0], score))
-
-    scores.sort(key=lambda schueler: schueler[1], reverse=True)
-    print(name)
-    for i in range(anzahlDerMatches):
-        print(str(i+1) + ". " + scores[i][0])
-    print("---")
+    jungsScores.sort(key=lambda schueler: schueler[1], reverse=True)
+    maedchenScores.sort(key=lambda schueler: schueler[1], reverse=True)
+    gemischtScores.sort(key=lambda schueler: schueler[1], reverse=True)
+    
+    out.write(name)
+    out.write("\n\nJungen-Matches:\n")
+    for i in range(3):
+        out.write(str(i+1) + ". " + jungsScores[i][0])
+        out.write("\n")
+    out.write("\nMädchen-Matches:\n")
+    for i in range(3):
+        out.write(str(i+1) + ". " + maedchenScores[i][0])
+        out.write("\n")
+    out.write("\nGemischt-Matches:\n")
+    for i in range(3):
+        out.write(str(i+1) + ". " + gemischtScores[i][0])
+        out.write("\n")
+    out.write("\n---\n\n")
         
